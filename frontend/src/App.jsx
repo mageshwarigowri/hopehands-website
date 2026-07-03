@@ -181,7 +181,12 @@ function HomePage({ setCurrentPage }) {
   Donate Now
 </button>
           <button
-  onClick={() => setCurrentPage("volunteer")}
+  onClick={() => {
+    setCurrentPage("volunteer");
+    setTimeout(() => {
+      alert("🎉 Welcome! Thank you for choosing to become a volunteer.");
+    }, 100);
+  }}
   onMouseEnter={(e) => {
     e.target.style.backgroundColor = "#0f172a";
     e.target.style.color = "#fff";
@@ -977,6 +982,8 @@ function CausesPage({ setCurrentPage }) {
 }
 
 function DonatePage() {
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [selectedAmount, setSelectedAmount] = useState("");
   return (
     <div
       style={{
@@ -1047,53 +1054,94 @@ function DonatePage() {
       </label>
 
       <div
-        style={{
-          display: "flex",
-          gap: "0.5rem",
-          marginBottom: "1.5rem",
-        }}
-      >
-        {["₹500", "₹1000", "₹2000", "Custom"].map((amt) => (
-          <button
-            key={amt}
-            style={{
-              flex: 1,
-              padding: "0.7rem",
-              border: "1px solid #16a34a",
-              background: "#fff",
-              borderRadius: "6px",
-              cursor: "pointer",
-              fontWeight: "600",
-              transition: "0.3s",
-            }}
-          >
-            {amt}
-          </button>
-        ))}
-      </div>
+  style={{
+    display: "flex",
+    gap: "0.5rem",
+    marginBottom: "1.5rem",
+  }}
+>
+  {["₹500", "₹1000", "₹2000", "Custom"].map((amt) => (
+    <button
+      key={amt}
+      onClick={() => setSelectedAmount(amt)}
+      style={{
+        flex: 1,
+        padding: "0.7rem",
+        border: selectedAmount === amt
+          ? "2px solid #16a34a"
+          : "1px solid #16a34a",
+        background: selectedAmount === amt
+          ? "#16a34a"
+          : "#fff",
+        color: selectedAmount === amt
+          ? "#fff"
+          : "#16a34a",
+        borderRadius: "6px",
+        cursor: "pointer",
+        fontWeight: "600",
+        transition: "all 0.3s ease",
+        transform: selectedAmount === amt
+          ? "scale(1.05)"
+          : "scale(1)",
+        boxShadow: selectedAmount === amt
+          ? "0 8px 20px rgba(22,163,74,0.3)"
+          : "none",
+      }}
+    >
+      {amt}
+    </button>
+  ))}
+</div>
 
       {/* Donate Button */}
       <button
-        style={{
-          width: "100%",
-          padding: "0.9rem",
-          background: "#16a34a",
-          color: "#fff",
-          border: "none",
-          borderRadius: "6px",
-          fontWeight: "bold",
-          fontSize: "1rem",
-          cursor: "pointer",
-        }}
-      >
-        Donate Securely
-      </button>
+  onClick={() => {
+    setShowSuccess(true);
+
+    // Hide message after 3 seconds
+    setTimeout(() => {
+      setShowSuccess(false);
+    }, 3000);
+  }}
+  style={{
+    width: "100%",
+    padding: "0.9rem",
+    background: "#16a34a",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    fontSize: "1rem",
+    cursor: "pointer",
+    transition: "all 0.3s ease",
+  }}
+>
+  Donate Securely
+</button>
+{showSuccess && (
+  <div
+    style={{
+      marginTop: "1rem",
+      padding: "12px",
+      borderRadius: "8px",
+      backgroundColor: "#dcfce7",
+      color: "#166534",
+      border: "1px solid #86efac",
+      textAlign: "center",
+      fontWeight: "600",
+      animation: "fadeIn 0.4s ease",
+    }}
+  >
+    ✅ Thank you for your generous donation! Your contribution will make a real difference.
+  </div>
+)}
     </div>
   );
 }
 
 
 function VolunteerPage() {
+  const [showVolunteerSuccess, setShowVolunteerSuccess] = useState(false);
   // Styles for the interactive card badges
   const cardStyle = {
     backgroundColor: '#fff',
@@ -1321,21 +1369,45 @@ function VolunteerPage() {
           <label style={labelStyle}>Availability</label>
           <input type="text" placeholder="e.g., Weekends, 4 hours/week" style={inputStyle} />
 
-          <button type="submit" style={{ 
-            width: '100%', 
-            padding: '0.85rem', 
-            background: '#16a34a', 
-            color: '#fff', 
-            border: 'none', 
-            borderRadius: '6px', 
-            fontWeight: 'bold', 
-            fontSize: '1rem',
-            cursor: 'pointer',
-            boxShadow: '0 4px 6px -1px rgba(22, 163, 74, 0.2)',
-            marginTop: '0.5rem'
-          }}>
-            Become a Volunteer
-          </button>
+          <button
+  onClick={() => {
+    setShowVolunteerSuccess(true);
+
+    setTimeout(() => {
+      setShowVolunteerSuccess(false);
+    }, 3000);
+  }}
+  style={{
+    width: "100%",
+    padding: "0.9rem",
+    background: "#2563eb",
+    color: "#fff",
+    border: "none",
+    borderRadius: "6px",
+    fontWeight: "bold",
+    fontSize: "1rem",
+    cursor: "pointer",
+  }}
+>
+  Submit Application
+</button>
+
+{showVolunteerSuccess && (
+  <div
+    style={{
+      marginTop: "1rem",
+      padding: "12px",
+      borderRadius: "8px",
+      backgroundColor: "#dbeafe",
+      color: "#1d4ed8",
+      border: "1px solid #93c5fd",
+      textAlign: "center",
+      fontWeight: "600",
+    }}
+  >
+    🎉 Thank you for volunteering! Our team will contact you shortly.
+  </div>
+)}
         </form>
 
         <p style={{ color: '#94a3b8', fontSize: '0.8rem', marginTop: '1.5rem', italic: 'true' }}>
